@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:padding="8dp"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/receivedReqProfilePic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/circle_image_outline"
+        android:padding="4dp"
+        android:src="@drawable/ic_person_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/receivedUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Sender Name"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/receivedReqProfilePic"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="sent you a friend request"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/receivedReqProfilePic"
+        app:layout_constraintStart_toEndOf="@+id/receivedReqProfilePic"
+        app:layout_constraintTop_toBottomOf="@+id/receivedUserName" />
+
+
+    <TextView
+        android:id="@+id/receivedAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/poppins_semibold"
+        android:padding="4dp"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:layout_marginEnd="8dp"
+
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:text="Accept"
+        android:textAlignment="center"
+        android:textColor="#03F337"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/receivedDecline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/receivedDecline"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+android:textColor="#FF0000"
+        android:layout_gravity="center"
+        android:fontFamily="@font/poppins_semibold"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="8dp"
+
+        android:paddingBottom="4dp"
+
+        android:text="Decline"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

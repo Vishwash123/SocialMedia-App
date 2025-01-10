@@ -1,0 +1,22 @@
+<!-- res/drawable/card_shadow.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#E0E0E0" />
+        </shape>
+    </item>
+    <item
+        android:left="4dp"
+        android:right="4dp"
+        android:top="4dp"
+        android:bottom="4dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF" />
+            <shadow
+                android:color="#40000000"
+                android:radius="8dp"
+                android:x="0dp"
+                android:y="4dp" />
+        </shape>
+    </item>
+</layer-list>

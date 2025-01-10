@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#6200EA</color> <!-- A bold purple shade -->
+
+    <!-- Background color for the main layout -->
+
+
+    <!-- Light grey for the profile picture background -->
+    <color name="grey_200">#E0E0E0</color> <!-- Soft grey for subtle backgrounds -->
+
+    <!-- Text color for secondary elements -->
+    <color name="textSecondary">#757575</color> <!-- Medium grey for less emphasis -->
+
+    <!-- Text color for buttons -->
+    <color name="textOnPrimary">#FFFFFF</color>
+
+    <color name="red">#FF0000</color>
+
+    <color name="purple">#BD00E8</color>
+</resources>
