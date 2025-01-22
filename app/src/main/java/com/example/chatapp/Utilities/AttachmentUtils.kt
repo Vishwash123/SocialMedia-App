@@ -2,6 +2,7 @@ package com.example.chatapp.Utilities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,11 +10,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.chatapp.MainUI.ChatsUi.ItemListDialogFragment
+import com.example.chatapp.Models.PostType
+import com.example.chatapp.MyApplication
 
 import com.example.chatapp.Utilities.AuthUtils.getRealPathFromURI
 import java.io.File
@@ -165,5 +169,45 @@ object AttachmentUtils {
         }
         documentLauncher.launch(intent)
     }
+
+
+    fun getPostType(fileUris: List<Uri>, context: Context): PostType {
+        var hasImages = false
+        var hasVideos = false
+
+        for (fileUri in fileUris) {
+            val mimeType = getMimeType(context, fileUri)
+
+            if (mimeType?.startsWith("image") == true) {
+                hasImages = true
+            } else if (mimeType?.startsWith("video") == true) {
+                hasVideos = true
+            }
+
+            // If both types are found, it's a combined post
+            if (hasImages && hasVideos) {
+                return PostType.COMBINED
+            }
+        }
+
+        return when {
+            hasImages -> PostType.PHOTO
+            hasVideos -> PostType.VIDEO
+            else->PostType.UNKNOWN
+        }
+    }
+
+
+    fun getMimeType(context: Context, uri: Uri): String? {
+        return if (uri.scheme == ContentResolver.SCHEME_CONTENT) {
+            context.contentResolver.getType(uri)
+        } else {
+            val fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension?.lowercase())
+        }
+    }
+
+
+
 
 }

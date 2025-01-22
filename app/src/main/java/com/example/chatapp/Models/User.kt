@@ -1,6 +1,7 @@
 package com.example.chatapp.Models
 
 import com.google.firebase.database.PropertyName
+import java.io.Serializable
 
 data class User(
     var id:String="",
@@ -30,9 +31,11 @@ data class User(
 
     @PropertyName("chats") var chats: List<String> = emptyList(),
 
+    var callIds:List<String> = emptyList(),
+
     val createdOn:Long = System.currentTimeMillis(),
     var lastUpdatedOn:Long = System.currentTimeMillis()
-){
+):Serializable{
     // Convert maps to lists dynamically
     val friendIds: List<String>
         get() = friends.values.toList()

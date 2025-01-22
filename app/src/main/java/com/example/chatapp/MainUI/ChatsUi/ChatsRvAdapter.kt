@@ -1,14 +1,12 @@
-package com.example.chatapp.MainUI.MainUiRvs
+package com.example.chatapp.MainUI.ChatsUi
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.chatapp.MainUI.Chats
 import com.example.chatapp.Models.Message
 import com.example.chatapp.Models.OneToOneChat
 import com.example.chatapp.Models.User
@@ -21,7 +19,8 @@ class ChatsRvAdapter(
     var chats:List<OneToOneChat>,
     var users:Map<String, User>,
     var lastMessages:Map<String,Message>,
-    val onItemClicked:(String?)->Unit
+    val onItemClicked:(String?)->Unit,
+    val onPhotoClicked:(User)->Unit
 ):RecyclerView.Adapter<ChatsRvAdapter.ChatsViewHolder>() {
 
 
@@ -67,6 +66,9 @@ class ChatsRvAdapter(
 
         holder.itemView.setOnClickListener{
             onItemClicked(user?.id)
+        }
+        holder.photo.setOnClickListener{
+            onPhotoClicked(user!!)
         }
 
     }

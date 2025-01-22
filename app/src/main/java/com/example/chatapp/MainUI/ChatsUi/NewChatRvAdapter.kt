@@ -1,15 +1,12 @@
 package com.example.chatapp.MainUI.ChatsUi
 
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.chatapp.MainUI.ChatRoom
 import com.example.chatapp.Models.User
 import com.example.chatapp.R
 import de.hdodenhof.circleimageview.CircleImageView

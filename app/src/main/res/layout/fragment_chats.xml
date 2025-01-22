@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".MainUI.Chats">
+    tools:context=".MainUI.ChatsUi.Chats">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"

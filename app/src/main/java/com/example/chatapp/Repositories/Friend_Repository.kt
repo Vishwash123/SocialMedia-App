@@ -491,6 +491,8 @@ class Friend_Repository @Inject constructor() {
                                 id = map["id"] as? String ?: "",
                                 name = map["name"] as? String ?: "",
                                 email = map["email"] as? String ?: "",
+                                profilePic = map["profilePic"] as? String ?: "",
+                                bio = map["bio"] as? String?: ""
                                 // Add other fields here as needed
                             )
 

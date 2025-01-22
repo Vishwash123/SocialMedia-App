@@ -1,6 +1,8 @@
 package com.example.chatapp.MainUI.FriendsUi
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import com.example.chatapp.MainUI.FriendsUi.FriendsUiRvs.SearchResultsRvAdapter
 import com.example.chatapp.Models.FriendRequest
 import com.example.chatapp.Models.User
 import com.example.chatapp.Utilities.FirebaseService
+import com.example.chatapp.Utilities.Util
 import com.example.chatapp.ViewModels.FriendViewModel
 import com.example.chatapp.databinding.FragmentFriendSearchResultsBinding
 import com.google.firebase.auth.FirebaseUser
@@ -23,8 +26,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class FriendSearchResults : Fragment() {
     private lateinit var currentUser: FirebaseUser
     private lateinit var currentSentReq:List<FriendRequest>
-    private lateinit var sentReqMap:Map<String,String>
-    private lateinit var friendsMap:Map<String,User>
+    private val sentReqMap=mutableMapOf<String,String>()
+    private val friendsMap = mutableMapOf<String,User>()
+    private val searchResults = mutableListOf<User>()
     private lateinit var friendSeachRv:RecyclerView
     private lateinit var friendSeachRvAdapter: SearchResultsRvAdapter
     private lateinit var searchQuery:String
@@ -39,6 +43,7 @@ class FriendSearchResults : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -61,6 +66,30 @@ class FriendSearchResults : Fragment() {
         currentUser = FirebaseService.firebaseAuth.currentUser?:return
         friendSeachRv = binding.friendSearchRv
         friendSeachRv.layoutManager = LinearLayoutManager(requireContext())
+        friendSeachRvAdapter = SearchResultsRvAdapter(
+            requireContext(),
+            searchResults,
+            sentReqMap,
+            friendsMap,
+            onAddClick = {user->
+                friendViewModel.sendFriendRequest(currentUser.uid,user.id)
+                friendSeachRvAdapter.notifyDataSetChanged()
+            },
+            onCancelClick = {requestId->
+                friendViewModel.cancelFriendRequest(currentUser.uid,requestId)
+                friendSeachRvAdapter.notifyDataSetChanged()
+            },
+            onRemoveClick = {user->
+                friendViewModel.removeFriend(currentUser.uid,user.id)
+                friendSeachRvAdapter.notifyDataSetChanged()
+            },
+            onItemClicked ={ user->
+                Util.loadOtherUserProfile(user.id,parentFragmentManager,true)
+            }
+
+        )
+
+        friendSeachRv.adapter = friendSeachRvAdapter
 
         observeData()
 
@@ -105,53 +134,44 @@ class FriendSearchResults : Fragment() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun observeData(){
         val userId = currentUser.uid
         friendViewModel.loadSentRequests(userId)
         friendViewModel.sentRequests.observe(viewLifecycleOwner){requests->
             currentSentReq = requests
-            sentReqMap = currentSentReq.associate { it.toUserId to it.requestId }
+            sentReqMap.clear()
+            sentReqMap.putAll(currentSentReq.associate { it.toUserId to it.requestId })
+            friendSeachRvAdapter.notifyDataSetChanged()
             updateSearchResults()
         }
 
         friendViewModel.loadFriendsList(userId)
         friendViewModel.friendList.observe(viewLifecycleOwner){friends->
-            friendsMap = friends.associateBy{it.id}
+            friendsMap.putAll(friends.associateBy{it.id})
+            friendSeachRvAdapter.notifyDataSetChanged()
             updateSearchResults()
         }
     }
 
     private fun updateSearchResults(){
         if(searchQuery.isNotEmpty()){
+
             loadSearchResults(searchQuery)
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun loadSearchResults(searchQuery: String) {
         friendViewModel.searchUsers(currentUser.uid,searchQuery)
         friendViewModel.searchResults.observe(viewLifecycleOwner){users->
             binding.friendsearchtext.text = "Search results for \"$searchQuery\" : ${users.size}"
-            friendSeachRvAdapter = SearchResultsRvAdapter(
-                requireContext(),
-                users,
-                sentReqMap,
-                friendsMap,
-                onAddClick = {user->
-                    friendViewModel.sendFriendRequest(currentUser.uid,user.id)
-                    friendSeachRvAdapter.notifyDataSetChanged()
-                },
-                onCancelClick = {requestId->
-                    friendViewModel.cancelFriendRequest(currentUser.uid,requestId)
-                    friendSeachRvAdapter.notifyDataSetChanged()
-                },
-                onRemoveClick = {user->
-                    friendViewModel.removeFriend(currentUser.uid,user.id)
-                    friendSeachRvAdapter.notifyDataSetChanged()
-                }
+            Log.d("search result xxo frag","${users.get(0)}")
+            searchResults.clear()
+            searchResults.addAll(users)
+            friendSeachRvAdapter.notifyDataSetChanged()
 
-            )
-
-            friendSeachRv.adapter = friendSeachRvAdapter
+//            friendSeachRv.adapter = friendSeachRvAdapter
 //            friendSeachRvAdapter.notifyDataSetChanged()
         }
 

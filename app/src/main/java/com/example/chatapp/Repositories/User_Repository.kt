@@ -3,23 +3,22 @@ package com.example.chatapp.Repositories
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.example.chatapp.Models.ProfileUiState
 import com.example.chatapp.Models.User
 import com.example.chatapp.Utilities.AuthUtils
 import com.example.chatapp.Utilities.CloudinaryHelper
 import com.example.chatapp.Utilities.FirebaseService
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -130,7 +129,167 @@ class User_Repository @Inject constructor() {
     }
 
 
+  //  fun getUserDetails(uid: String):User?{
+//
+//            val snapshot = database.child("users").child(uid).get().addOnSuccessListener { snapshot->
+//
+//                val user = snapshot.getValue(User::class.java)
+//                Log.d("call vm xxo","${user.toString()}")
+//                return@addOnSuccessListener
+//
+//            }
+//
+//
+//
+//
+//    }
+  fun getUserDetails(userId: String, callback: (User?) -> Unit) {
+      val userRef = database.child("users").child(userId)
+      userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+          override fun onDataChange(snapshot: DataSnapshot) {
+              val user = snapshot.getValue(User::class.java)
+              callback(user) // Return the user data through the callback
+          }
+
+          override fun onCancelled(error: DatabaseError) {
+              callback(null) // If there's an error, return null
+          }
+      })
+  }
+
+    // Fetch the list of call IDs associated with a user
+    fun getUserCalls(userId: String, callback: (List<String>) -> Unit) {
+        val userCallsRef = database.child("users").child(userId).child("callIds")
+        userCallsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val calls = mutableListOf<String>()
+                snapshot.children.forEach {
+                    it.getValue(String::class.java)?.let { callId ->
+                        calls.add(callId)
+                    }
+                }
+                callback(calls) // Return the list of call IDs through the callback
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(emptyList()) // If there's an error, return an empty list
+            }
+        })
+    }
+
+    suspend fun getUsersDataForIds(ids: List<String>): List<User> {
+        val users = mutableListOf<User>()
+
+        try {
+            // Loop through each ID and fetch user data
+            val usersRef = database.child("users")
+            ids.forEach { userId ->
+                val userSnapshot = usersRef.child(userId).get().await() // Suspend until data is fetched
+
+                val user = userSnapshot.getValue(User::class.java)
+                user?.let { users.add(it) }
+            }
+        } catch (e: Exception) {
+            // Handle any errors that occur during fetching data
+            e.printStackTrace()
+        }
+
+        return users
+    }
+
     suspend fun signOut(){
         auth.signOut()
+    }
+
+    fun fetchProfileUiState(userId:String,onResult:(ProfileUiState)->Unit){
+        val ref = database.child("users/$userId")
+        val profileUiState = ProfileUiState()
+        ref.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    val user = snapshot.getValue(User::class.java)
+                    profileUiState.name = user!!.name
+                    profileUiState.profilePic = user.profilePic
+                    profileUiState.posts = user.posts.size
+                    profileUiState.friends = user.friends.size
+                    profileUiState.bio = user.bio
+                    onResult(profileUiState)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+
+
+    }
+
+
+    fun updateBio(userId:String,bio:String){
+        val ref = database.child("users/$userId").child("bio").setValue(bio)
+
+
+    }
+
+    fun fetchAndReturnUserData(userId: String,onResult: (ProfileUiState) -> Unit){
+        val ref = database.child("users/$userId")
+        val otherUserState= ProfileUiState()
+        ref.get().addOnSuccessListener {snapshot->
+            if(snapshot!=null){
+                val user = snapshot.getValue(User::class.java)
+                otherUserState.name = user!!.name
+                otherUserState.bio = user!!.bio
+                otherUserState.friends = snapshot.child("friends").childrenCount.toInt()
+                otherUserState.profilePic = user!!.profilePic
+                val postsSnapshot = snapshot.child("posts")
+                val postIdList = mutableListOf<String>()
+                if(postsSnapshot.exists()){
+                    postsSnapshot.children.forEach{
+                        postIdList.add(it.getValue(String::class.java)?:"")
+                    }
+                    otherUserState.postIds = postIdList
+                    otherUserState.posts = postIdList.size
+                }
+
+            }
+            onResult(otherUserState)
+
+        }.addOnFailureListener{
+            onResult(ProfileUiState())
+        }
+    }
+
+
+    fun updateProfilePhoto(userId: String, uri:Uri?, context: Context, onProgress: (Int) -> Unit, onComplete:()->Unit){
+        val ref = database.child("users/$userId")
+        uri?.let { imageUri ->
+            val filePath = AuthUtils.getRealPathFromURI(context, imageUri)
+            if (!filePath.isNullOrEmpty() && File(filePath).exists()) {
+                CloudinaryHelper.uploadFile(
+                    filePath = filePath,
+                    fileType = "image",
+                    onStart = { onProgress(0) },
+                    onProgress = { progress -> onProgress(progress) },
+                    onError = { error -> onComplete() },
+                    onSuccess = { url ->
+                        ref.child("profilePic").setValue(url)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val profileChangeRequest = UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(url)).build()
+                            FirebaseService.firebaseAuth.currentUser!!.updateProfile(profileChangeRequest).await()
+                            onComplete()
+                        }
+                    }
+                )
+            } else {
+
+
+            }
+        } ?: run {
+
+            //go after
+        }
+
     }
 }

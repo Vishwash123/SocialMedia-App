@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/friendFragCont"
 
-    tools:context=".MainUI.Friends">
+    tools:context=".MainUI.FriendsUi.Friends">
 
     <TextView
         android:id="@+id/textView2"

@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.Glide
 import com.example.chatapp.R
 import com.example.chatapp.Utilities.FirebaseService
@@ -18,9 +21,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class Preview : Fragment() {
-    private val chatsViewModel:ChatsViewModel by viewModels()
+    private val chatsViewModel:ChatsViewModel by activityViewModels()
     private lateinit var binding:FragmentPreviewBinding
     private lateinit var otherUserId: String
+    private lateinit var chatId: String
     private lateinit var currentUser:FirebaseUser
     private lateinit var attachmentType:String
     private lateinit var attachmentUri:Uri
@@ -50,7 +54,9 @@ class Preview : Fragment() {
         Log.d("yeah","$attachmentUri")
         Log.d("yeaht","$attachmentType")
         otherUserId = arguments?.getString("otherUserid")!!
+        chatId = arguments?.getString("chatId")!!
         currentUser = FirebaseService.firebaseAuth.currentUser!!
+        val temporaryId= "${currentUser.uid}_${otherUserId}_${System.currentTimeMillis()}"
         when(attachmentType){
             "image"->{
                 binding.previewVideo.visibility = View.GONE
@@ -60,6 +66,13 @@ class Preview : Fragment() {
             "video"->{
                 binding.previewVideo.visibility = View.VISIBLE
                 binding.previewPhoto.visibility = View.GONE
+                val player = ExoPlayer.Builder(requireContext()).build()
+                binding.previewVideo.player = player
+                val mediaItem = MediaItem.fromUri(attachmentUri)
+                player.setMediaItem(mediaItem)
+                player.prepare()
+
+
             }
         }
 
@@ -70,8 +83,11 @@ class Preview : Fragment() {
         binding.previewSendButton.setOnClickListener{
             val caption = binding.previewMessageTyper.text.toString()
             Log.d("other id check","$otherUserId")
-            chatsViewModel.sendMessage(requireContext(),currentUser.uid,otherUserId,caption,attachmentUri)
-            parentFragmentManager.popBackStack()
+            chatsViewModel.sendMessage(requireContext().applicationContext,currentUser.uid,otherUserId,caption,attachmentUri,temporaryId, chatId = chatId )
+                    parentFragmentManager.popBackStack()
+
+
+
         }
 
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/newPostFabButton"
+        android:title="New Post"
+
+        android:icon="@drawable/new_post_icon"
+        android:orderInCategory="2"/>
+
+    <item
+        android:id="@+id/newStoryFabButton"
+        android:title="New Story"
+        android:icon="@drawable/new_story_icon"
+        android:orderInCategory="1"/>
+
+
+</menu>

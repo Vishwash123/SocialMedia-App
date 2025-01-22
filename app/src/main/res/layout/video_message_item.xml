@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:paddingTop="5dp"
     android:layout_height="wrap_content">
@@ -25,14 +26,35 @@
             android:paddingRight="12dp"
             android:paddingBottom="8dp">
 
-            <androidx.media3.ui.PlayerView
+            <ImageView
                 android:id="@+id/videoMessageVideoPlayer"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/videoMessagePlayButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/play_button"
+                app:layout_constraintBottom_toBottomOf="@+id/videoMessageVideoPlayer"
+                app:layout_constraintEnd_toEndOf="@+id/videoMessageVideoPlayer"
+                app:layout_constraintStart_toStartOf="@+id/videoMessageVideoPlayer"
+                app:layout_constraintTop_toTopOf="@+id/videoMessageVideoPlayer" />
+
+
+            <ProgressBar
+                android:id="@+id/videoMessageProgressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@+id/videoMessageVideoPlayer"
+                app:layout_constraintEnd_toEndOf="@+id/videoMessageVideoPlayer"
+                app:layout_constraintStart_toStartOf="@+id/videoMessageVideoPlayer"
+                app:layout_constraintTop_toTopOf="@+id/videoMessageVideoPlayer" />
 
             <TextView
                 android:id="@+id/videoMessageText"

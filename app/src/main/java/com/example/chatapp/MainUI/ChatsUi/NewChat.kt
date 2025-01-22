@@ -5,11 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.chatapp.MainUI.ChatRoom
 import com.example.chatapp.Models.User
 import com.example.chatapp.R
 import com.example.chatapp.Utilities.FirebaseService
@@ -17,7 +14,6 @@ import com.example.chatapp.ViewModels.FriendViewModel
 import com.example.chatapp.databinding.FragmentNewChatBinding
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
-import org.checkerframework.checker.units.qual.Current
 
 @AndroidEntryPoint
 class NewChat : Fragment() {

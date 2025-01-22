@@ -15,11 +15,16 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 @HiltAndroidApp
 class MyApplication:Application() {
 
-
+    object AppCoroutineScope {
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO) // SupervisorJob prevents cancellation of siblings
+    }
 
     override fun onCreate() {
         super.onCreate()

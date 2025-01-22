@@ -29,6 +29,7 @@ import com.example.chatapp.Utilities.AuthUtils
 import com.example.chatapp.Utilities.FirebaseService
 import com.example.chatapp.databinding.FragmentItemListDialogListDialogItemBinding
 import com.example.chatapp.databinding.FragmentItemListDialogListDialogBinding
+import com.google.rpc.context.AttributeContext.Auth
 
 // TODO: Customize parameter argument names
 
@@ -46,9 +47,10 @@ import com.example.chatapp.databinding.FragmentItemListDialogListDialogBinding
 
 class ItemListDialogFragment : BottomSheetDialogFragment() {
     private lateinit var  ARG_OTHER_USER_ID:String
+    private lateinit var  ARG_CHAT_ID:String
     private var _binding: FragmentItemListDialogListDialogBinding? = null
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
-    private lateinit var videoPickerLauncher: ActivityResultLauncher<Intent>
+    private lateinit var videoPickerLauncher: ActivityResultLauncher<String>
     private lateinit var audioPickerLauncher: ActivityResultLauncher<Intent>
     private lateinit var documentPickerLauncher: ActivityResultLauncher<Intent>
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
@@ -74,6 +76,8 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ARG_OTHER_USER_ID = arguments?.getString("otherUserId")!!
+        ARG_CHAT_ID = arguments?.getString("chatId")!!
+
     }
 
 
@@ -105,6 +109,7 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
                     val bundle = Bundle()
                     bundle.putParcelable("uri",it);
                     bundle.putString("type","image")
+                    bundle.putString("chatId", ARG_CHAT_ID)
                     bundle.putString("otherUserid", ARG_OTHER_USER_ID)
                     previewFragment.arguments = bundle
                     parentFragmentManager.beginTransaction().replace(R.id.mainuiFragContainer,previewFragment).commit()
@@ -113,25 +118,12 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
                  }
         }
 
-        videoPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
-            if(result.resultCode==Activity.RESULT_OK){
-                val uri = result.data?.data
-                requireContext().contentResolver.takePersistableUriPermission(uri!!,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        videoPickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){ uri->
+            uri?.let {
+                val videoUri = it
+                val path = AuthUtils.getRealPathFromURI(requireContext(),videoUri)
+                loadPreviewFragment(videoUri,path,"video")
 
-                val previewFragment = Preview();
-
-                uri?.let{
-                    val bundle = Bundle()
-                    bundle.putParcelable("uri",it);
-                    bundle.putString("type","video")
-                    bundle.putString("otherUserid", ARG_OTHER_USER_ID)
-                    previewFragment.arguments = bundle
-                }
-
-
-
-                parentFragmentManager.beginTransaction().replace(R.id.mainuiFragContainer,previewFragment).commit()
             }
         }
 
@@ -144,6 +136,7 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
                     val bundle = Bundle()
                     bundle.putParcelable("uri",it);
                     bundle.putString("otherUserid", ARG_OTHER_USER_ID)
+                    bundle.putString("chatId", ARG_CHAT_ID)
                     bundle.putString("type","audio")
                     previewFragment.arguments = bundle
                 }
@@ -162,6 +155,7 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
                 uri?.let{
                     val bundle = Bundle()
                     bundle.putParcelable("uri",it);
+                    bundle.putString("chatId", ARG_CHAT_ID)
                     bundle.putString("type","document")
                     bundle.putString("otherUserid", ARG_OTHER_USER_ID)
                     previewFragment.arguments = bundle
@@ -193,6 +187,7 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
                     bundle.putParcelable("uri",it);
 
                     bundle.putString("type",type)
+                    bundle.putString("chatId", ARG_CHAT_ID)
                     bundle.putString("otherUserid", ARG_OTHER_USER_ID)
                     previewFragment.arguments = bundle
                 }
@@ -212,7 +207,9 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
             "Image"->{
                pickFile("image")
             }
-            "Video"->AttachmentUtils.pickFile(requireContext(),"video",videoPickerLauncher)
+            "Video"->{
+                pickFile("video")
+            }
             "Document"->AttachmentUtils.documentPicker(documentPickerLauncher)
             "Audio"->AttachmentUtils.audioPicker(audioPickerLauncher)
             else->return
@@ -289,10 +286,11 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
     companion object {
 
 
-        fun newInstance(otherUserId:String,context: Context): ItemListDialogFragment {
+        fun newInstance(chatId:String,otherUserId:String,context: Context): ItemListDialogFragment {
             val fragment = ItemListDialogFragment()
             val bundle = Bundle()
             bundle.putString("otherUserId",otherUserId)
+            bundle.putString("chatId",chatId)
             fragment.arguments = bundle
 
             return fragment
@@ -322,6 +320,7 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
         val bundle = Bundle()
         bundle.putString("otherUserid", ARG_OTHER_USER_ID)
         bundle.putString("type",type)
+        bundle.putString("chatId",ARG_CHAT_ID)
         bundle.putParcelable("uri",uri)
         previewFrag.arguments = bundle
 
@@ -371,7 +370,7 @@ class ItemListDialogFragment : BottomSheetDialogFragment() {
                 photoLauncher.launch("image/*")
             }
             "video"->{
-
+                videoPickerLauncher.launch("video/*")
             }
             "audio"->{
 

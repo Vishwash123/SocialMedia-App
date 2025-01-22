@@ -1,5 +1,6 @@
 package com.example.chatapp.ViewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,10 @@ class FriendViewModel @Inject constructor(private val friendRepository: Friend_R
     private val _userDetails = MutableLiveData<Map<String,User>>()
     val userDetails:LiveData<Map<String,User>> = _userDetails
 
+    private var areFriendsLoaded = false
+    private var areSentRequestsLoaded = false
+    private var areReceivedRequestsLoaded = false
+
 
     fun sendFriendRequest(fromUserId:String,toUserId:String){
         friendRepository.sendFriendRequest(fromUserId,toUserId){success->
@@ -57,21 +62,38 @@ class FriendViewModel @Inject constructor(private val friendRepository: Friend_R
     }
 
     fun loadSentRequests(userId:String){
+        if(areSentRequestsLoaded && _sentRequests.value!=null) {
+            _sentRequests.value = _sentRequests.value
+            return
+        }
         friendRepository.getSentFriendRequests(userId){requests->
             _sentRequests.postValue(requests)
+            areSentRequestsLoaded=true
 
         }
     }
 
     fun loadReceivedRequests(userId: String){
+        if(areReceivedRequestsLoaded && _receivedRequests.value!=null) {
+            _receivedRequests.value = _receivedRequests.value
+            return
+        }
         friendRepository.getReceivedFriendRequests(userId){requests->
             _receivedRequests.postValue(requests)
+            areReceivedRequestsLoaded=true
         }
     }
 
     fun loadFriendsList(userId: String){
+        if(areFriendsLoaded && _friendList.value!=null) {
+            _friendList.value = _friendList.value
+            return
+        }
+        Log.d("load friends xxxo","loading")
         friendRepository.getFriendList(userId){friends->
             _friendList.postValue(friends)
+            areFriendsLoaded=true
+
 
         }
     }

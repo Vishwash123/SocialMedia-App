@@ -17,7 +17,8 @@ class ReceivedRequestsRvAdapter(
     val receivedRequests:List<FriendRequest>,
     val userDetails:Map<String, User>,
     val onAccept:(FriendRequest)->Unit,
-    val onReject:(FriendRequest)->Unit
+    val onReject:(FriendRequest)->Unit,
+    val onItemClicked: (User)->Unit
 ):RecyclerView.Adapter<ReceivedRequestsRvAdapter.ReceivedRequestsViewHolder>() {
     inner class ReceivedRequestsViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         val profilePic = itemView.findViewById<CircleImageView>(R.id.receivedReqProfilePic)
@@ -49,6 +50,10 @@ class ReceivedRequestsRvAdapter(
 
         holder.acceptButton.setOnClickListener{
             onAccept(currentReq)
+        }
+
+        holder.itemView.setOnClickListener{
+            onItemClicked(senderUser!!)
         }
 
         holder.rejectButton.setOnClickListener{

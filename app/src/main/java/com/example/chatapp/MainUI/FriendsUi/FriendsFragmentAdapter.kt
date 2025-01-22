@@ -1,12 +1,9 @@
-package com.example.chatapp.MainUI.MainUiRvs
+package com.example.chatapp.MainUI.FriendsUi
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.chatapp.MainUI.FriendsUi.FriendList
-import com.example.chatapp.MainUI.FriendsUi.ReceivedRequests
-import com.example.chatapp.MainUI.FriendsUi.SentRequests
 
 class FriendsFragmentAdapter(fragmentManger:FragmentManager,lifecycle:Lifecycle):FragmentStateAdapter(fragmentManger,lifecycle) {
     override fun getItemCount(): Int {
@@ -22,9 +19,21 @@ class FriendsFragmentAdapter(fragmentManger:FragmentManager,lifecycle:Lifecycle)
         {
             SentRequests()
         }
-        else
+        else if(position==2)
         {
             ReceivedRequests()
         }
+        else{
+            throw IllegalStateException("Invalid Position : $position")
+        }
+    }
+    override fun getItemId(position: Int): Long {
+        // Return a stable ID based on position
+        return position.toLong()
+    }
+
+    override fun containsItem(itemId: Long): Boolean {
+        // Ensure the item ID is valid
+        return itemId in 0 until itemCount
     }
 }

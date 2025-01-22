@@ -1,6 +1,7 @@
 package com.example.chatapp.MainUI.FriendsUi.FriendsUiRvs
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,8 @@ class SearchResultsRvAdapter(
     val currentFriends:Map<String,User>,
     val onAddClick:(User)->Unit,
     val onCancelClick:(String)->Unit,
-    val onRemoveClick:(User)->Unit
+    val onRemoveClick:(User)->Unit,
+    val onItemClicked:(User)->Unit
     ):RecyclerView.Adapter<SearchResultsRvAdapter.SearchResultsViewHolder>() {
         inner class SearchResultsViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
             val profilePic = itemView.findViewById<CircleImageView>(R.id.searchResultPhoto)
@@ -42,6 +44,10 @@ class SearchResultsRvAdapter(
         val currentUser = searchResults[position]
         holder.name.text = currentUser.name
         holder.bio.text = currentUser.bio
+        holder.itemView.setOnClickListener{
+            onItemClicked(currentUser)
+        }
+        Log.d("search result xxo","${currentUser.bio}")
         Glide.with(context)
             .load(currentUser.profilePic)
             .placeholder(R.drawable.ic_person_placeholder)

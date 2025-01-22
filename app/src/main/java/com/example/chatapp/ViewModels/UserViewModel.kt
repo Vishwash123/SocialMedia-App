@@ -7,13 +7,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatapp.Models.ProfileUiState
 import com.example.chatapp.Models.User
 import com.example.chatapp.Repositories.User_Repository
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,11 +36,25 @@ class UserViewModel @Inject constructor(private val userRepository: User_Reposit
 
 
 
+    val userData: LiveData<List<User?>> = MutableLiveData()
+
+    private val _profilePicProgress = MutableLiveData<Int>()
+    val profilePicProgress : LiveData<Int> = _profilePicProgress
+
+
+
     private var signUpProgress = 0
     private var imageUploadProgress = 0
 
     private val _signOutResult = MutableLiveData<Boolean>()
     val signOutResult:LiveData<Boolean> = _signOutResult
+
+
+    private val _profileUiState = MutableLiveData<ProfileUiState>()
+    val profileUiState:LiveData<ProfileUiState> = _profileUiState
+
+    private val _otherProfileUiState = MutableLiveData<ProfileUiState>()
+    val otherProfileUiState:LiveData<ProfileUiState> = _otherProfileUiState
 
 //    fun signUp(email:String,password:String,user: User,imageUri: Uri?,context: Context){
 //        viewModelScope.launch {
@@ -101,6 +119,13 @@ class UserViewModel @Inject constructor(private val userRepository: User_Reposit
         }
     }
 
+    fun fetchUsersData(ids: List<String>) {
+        viewModelScope.launch {
+            val users = userRepository.getUsersDataForIds(ids)
+            (userData as MutableLiveData).postValue(users)
+        }
+    }
+
 
     fun signOut(){
         viewModelScope.launch {
@@ -109,6 +134,35 @@ class UserViewModel @Inject constructor(private val userRepository: User_Reposit
         }
     }
 
+    fun fetchProfilUIState(userId:String){
+        userRepository.fetchProfileUiState(userId){state->
+            _profileUiState.postValue(state)
+        }
+    }
 
+    fun updateBio(userId:String,bio:String){
+        userRepository.updateBio(userId,bio)
+    }
+
+    fun fetchAndReturnUser(userId: String){
+        userRepository.fetchAndReturnUserData(userId){state->
+            _otherProfileUiState.postValue(state)
+        }
+    }
+
+    fun updateProfilePic(context: Context,userId:String,uri: Uri){
+        _profilePicProgress.postValue(0)
+        userRepository.updateProfilePhoto(userId,uri,context,
+            onProgress = {progress->
+                _profilePicProgress.postValue(progress)
+            },
+            onComplete = {
+                _profilePicProgress.postValue(-1)
+            }
+
+        )
+
+
+    }
 
 }

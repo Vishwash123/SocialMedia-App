@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:paddingTop="5dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/videoMessageReceivedLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="start"
+        android:background="@drawable/receiver_chat_bubble"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/videoMessageReceivedVideoPlayer"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/videoMessageReceivedPlayButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/play_button"
+                app:layout_constraintBottom_toBottomOf="@+id/videoMessageReceivedVideoPlayer"
+                app:layout_constraintEnd_toEndOf="@+id/videoMessageReceivedVideoPlayer"
+                app:layout_constraintStart_toStartOf="@+id/videoMessageReceivedVideoPlayer"
+                app:layout_constraintTop_toTopOf="@+id/videoMessageReceivedVideoPlayer" />
+
+            <TextView
+                android:id="@+id/videoMessageReceivedText"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxWidth="300dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="placeholder"
+                android:textColor="#6200EE"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/videoMessageReceivedVideoPlayer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/videoMessageReceivedVideoPlayer" />
+
+            <TextView
+                android:id="@+id/videoMessageReceivedStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seen"
+                android:textColor="#6200EE"
+
+                android:textSize="10sp"
+                android:fontFamily="@font/poppins_regular"
+                app:layout_constraintTop_toBottomOf="@+id/videoMessageReceivedText"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+            <TextView
+                android:id="@+id/videoMessageReceivedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:text="10:00pm"
+                android:textColor="#6200EE"
+                android:textSize="10sp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/videoMessageReceivedStatus"
+                app:layout_constraintTop_toBottomOf="@+id/videoMessageReceivedText" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

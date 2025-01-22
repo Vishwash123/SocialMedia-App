@@ -14,11 +14,13 @@ import de.hdodenhof.circleimageview.CircleImageView
 class FriendListRvAdapter(
     val context: Context,
     val friendsList:List<User>,
-    val onRemoveClick:(User)->Unit):RecyclerView.Adapter<FriendListRvAdapter.FriendListViewHolder>() {
+    val onRemoveClick:(User)->Unit,
+    val onItemClicked:(User)->Unit):RecyclerView.Adapter<FriendListRvAdapter.FriendListViewHolder>() {
     inner class FriendListViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         val friendProfilePic = itemView.findViewById<CircleImageView>(R.id.friendListPhoto)
         val friendName = itemView.findViewById<TextView>(R.id.friendListName)
         val removeButton = itemView.findViewById<TextView>(R.id.friendListRemove)
+        val bio = itemView.findViewById<TextView>(R.id.friendListBio)
 
     }
 
@@ -35,7 +37,10 @@ class FriendListRvAdapter(
     override fun onBindViewHolder(holder: FriendListViewHolder, position: Int) {
         val currentItem = friendsList[position]
         holder.friendName.text = currentItem.name
-
+        holder.bio.text = currentItem.bio
+        holder.itemView.setOnClickListener{
+            onItemClicked(currentItem)
+        }
         Glide.with(context)
             .load(currentItem.profilePic)
             .placeholder(R.drawable.ic_person_placeholder)

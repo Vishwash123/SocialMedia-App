@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.MainUI.FriendsUi.FriendsUiRvs.FriendListRvAdapter
 import com.example.chatapp.Models.User
 import com.example.chatapp.Utilities.FirebaseService
+import com.example.chatapp.Utilities.Util
 import com.example.chatapp.ViewModels.FriendViewModel
 import com.example.chatapp.databinding.FragmentFriendListBinding
 import com.google.firebase.auth.FirebaseUser
@@ -20,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FriendList : Fragment() {
-    private val friendViewModel:FriendViewModel by viewModels()
+    private val friendViewModel:FriendViewModel by activityViewModels()
     private lateinit var binding: FragmentFriendListBinding
     private lateinit var friendListRv:RecyclerView
     private lateinit var friendListRvAdapter: FriendListRvAdapter
@@ -41,9 +43,15 @@ class FriendList : Fragment() {
         friendViewModel.loadFriendsList(currentUser.uid)
         friendListRv = binding.friendListRecyclerView
         friendListRv.layoutManager = LinearLayoutManager(requireContext())
-        friendListRvAdapter = FriendListRvAdapter(requireContext(),friends){user->
-            friendViewModel.removeFriend(currentUser.uid,user.id)
-        }
+        friendListRvAdapter = FriendListRvAdapter(requireContext(),friends,
+            onRemoveClick = {user->
+                friendViewModel.removeFriend(currentUser.uid,user.id)
+            },
+            onItemClicked = {user->
+                Util.friendsViewPageState = 0
+                Util.loadOtherUserProfile(user.id,requireActivity().supportFragmentManager,true)
+            }
+        )
 
         val dividerItemDecoration = DividerItemDecoration(
             friendListRv.context,
@@ -62,9 +70,6 @@ class FriendList : Fragment() {
 
 
     }
-
-
-
 
 
 

@@ -11,7 +11,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/circle_image_outline"
-        android:padding="4dp"
+        android:padding="2dp"
         android:src="@drawable/ic_person_placeholder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,10 +24,27 @@
         android:fontFamily="@font/poppins_medium"
         android:text="Friend Name"
         android:textColor="@color/black"
+        android:layout_marginTop="8dp"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/friendListPhoto"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/friendListPhoto"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/friendListBio"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:text="wklnqkdnfknglknrelgnrken kefnkqnklqnkvnknveqlknrvknerknvkenvknkvnqkvn"
+
+        android:textColor="#757575"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/friendListPhoto"
+        app:layout_constraintStart_toStartOf="@+id/friendListName"
+        app:layout_constraintTop_toBottomOf="@+id/friendListName"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/friendListRemove"

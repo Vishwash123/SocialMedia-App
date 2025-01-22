@@ -19,6 +19,19 @@
         </style>
 
 
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">250dp</item>
+    </style>
+
+
+    <style name="SpeedDialLabelStyle" parent="TextAppearance.MaterialComponents.Body1">
+
+
+        <item name="android:fontFamily">@font/poppins_medium</item>
+
+    </style>
+
+
 
 
 

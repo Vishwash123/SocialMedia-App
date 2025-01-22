@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.example.chatapp.MainUI.FriendsUi.FriendsUiRvs.SentRequestsRvAdapter
 import com.example.chatapp.Models.FriendRequest
 import com.example.chatapp.Models.User
 import com.example.chatapp.Utilities.FirebaseService
+import com.example.chatapp.Utilities.Util
 import com.example.chatapp.ViewModels.FriendViewModel
 import com.example.chatapp.databinding.FragmentSentRequestsBinding
 import com.google.firebase.auth.FirebaseUser
@@ -25,7 +27,7 @@ class SentRequests : Fragment() {
     private lateinit var sentRequestsRvAdapter: SentRequestsRvAdapter
     private val sentRequests = mutableListOf<FriendRequest>()
     private val userDetails = mutableMapOf<String, User>()
-    private val friendViewModel:FriendViewModel by viewModels()
+    private val friendViewModel:FriendViewModel by activityViewModels()
     private lateinit var binding: FragmentSentRequestsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +46,14 @@ class SentRequests : Fragment() {
         sentReqRv = binding.SentRequestsRecyclerView
         sentReqRv.layoutManager = LinearLayoutManager(requireContext())
 
-        sentRequestsRvAdapter = SentRequestsRvAdapter(requireContext(), sentRequests, userDetails) { request ->
-            friendViewModel.cancelFriendRequest(currentUser.uid, request.requestId)
-        }
+        sentRequestsRvAdapter = SentRequestsRvAdapter(requireContext(), sentRequests, userDetails,
+            onCancel = { request ->
+                friendViewModel.cancelFriendRequest(currentUser.uid, request.requestId)
+            },
+            onItemClicked = {user->
+                Util.friendsViewPageState=1
+                Util.loadOtherUserProfile(user.id,parentFragmentManager,true)
+            })
         sentReqRv.adapter = sentRequestsRvAdapter // Attach the adapter initially
 
 

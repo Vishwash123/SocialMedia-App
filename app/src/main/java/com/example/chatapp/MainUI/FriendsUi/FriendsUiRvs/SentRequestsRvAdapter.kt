@@ -17,7 +17,8 @@ class SentRequestsRvAdapter(
     val context: Context,
     val sentRequests:List<FriendRequest>,
     val userDetails:Map<String, User>,
-    val onCancel:(FriendRequest)->Unit
+    val onCancel:(FriendRequest)->Unit,
+    val onItemClicked:(User)->Unit,
     ):RecyclerView.Adapter<SentRequestsRvAdapter.SentRequestsViewHolder>() {
         inner class SentRequestsViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
             val profilePic = itemView.findViewById<CircleImageView>(R.id.sentUserPhoto)
@@ -45,6 +46,10 @@ class SentRequestsRvAdapter(
             .load(toUser?.profilePic)
             .placeholder(R.drawable.ic_person_placeholder)
             .into(holder.profilePic)
+
+        holder.itemView.setOnClickListener{
+            onItemClicked(toUser!!)
+        }
 
         holder.cancelButton.setOnClickListener{
             onCancel(currentReq)
