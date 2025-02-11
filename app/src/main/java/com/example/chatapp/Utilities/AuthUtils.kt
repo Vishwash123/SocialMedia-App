@@ -153,6 +153,10 @@ object AuthUtils {
         }
 
         try {
+            if (id.contains(":")) {
+                // If `id` contains a prefix like `msf:`, fallback to copying the file
+                return copyFileToTemp(context, uri)
+            }
 
             val contentUri = ContentUris.withAppendedId(
                 Uri.parse("content://downloads/public_downloads"), id.toLong()

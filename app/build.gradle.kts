@@ -92,6 +92,8 @@ dependencies {
     implementation("com.github.kobakei:MaterialFabSpeedDial:2.0.0")
     implementation("io.reactivex.rxjava3:rxjava:3.1.5")  // RxJava
     implementation("io.reactivex.rxjava3:rxandroid:3.0.0") // RxAndroid (for Android-specific functionalities)
+    implementation("com.guolindev.permissionx:permissionx:1.8.1")
+    implementation("com.github.colourmoon:readmore-textview:v1.0.2")
 
 
 }

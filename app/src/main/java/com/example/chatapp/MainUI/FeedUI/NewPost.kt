@@ -60,10 +60,14 @@ class NewPost : Fragment() {
 
 
         }
+
+        binding.newPostCloseButton.setOnClickListener{
+            parentFragmentManager.popBackStack()
+        }
         binding.newPostDoneButton.setOnClickListener{
             val caption = binding.newPostCaptionTyper.text.toString()
             val postType = AttachmentUtils.getPostType(receivedUris,requireContext())
-            postViewModel.createPost(requireContext(),FirebaseService.firebaseAuth.currentUser!!.uid,receivedUris,caption,postType)
+            postViewModel.createPost(requireContext(),FirebaseService.firebaseAuth.currentUser!!.uid,receivedUris,caption,postType,FirebaseService.firebaseAuth.currentUser!!.displayName)
         }
 
     }

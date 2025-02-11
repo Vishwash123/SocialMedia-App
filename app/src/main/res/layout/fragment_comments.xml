@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainUI.ProfileUI.Comments">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/commentsTopBar"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/commentBackButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/chat_room_back_button"
+            app:layout_constraintBottom_toBottomOf="@+id/CommenttextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/CommenttextView" />
+
+
+  
+        <TextView
+            android:id="@+id/CommenttextView"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Comments"
+            android:textStyle="bold"
+            android:textColor="#6200EE"
+            android:textSize="30sp"
+            app:layout_constraintStart_toEndOf="@id/commentBackButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/postCommentRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#FAFAFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentsTopBar"
+        tools:listitem="@layout/comment_item" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvCommentType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+       android:elevation="20dp"
+        app:cardCornerRadius="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingEnd="8dp"
+            android:paddingTop="2dp"
+            android:paddingStart="16dp"
+            android:paddingBottom="2dp"
+            >
+
+            <EditText
+                android:id="@+id/commentEditText"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="#0000"
+                android:fontFamily="@font/poppins_regular"
+                android:hint="Leave a comment"
+                android:textColor="@color/black"
+                android:layout_marginEnd="8dp"
+                android:maxLines="50"
+                android:scrollbars="vertical"
+                android:overScrollMode="always"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/postCommentAddImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/postCommentButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/comment_done"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/postCommentAddImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/comment_image"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/postCommentButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

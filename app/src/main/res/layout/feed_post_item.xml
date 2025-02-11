@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:paddingVertical="16dp"
+    android:layout_marginBottom="28dp"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/feedPostProfilePic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle_image_outline"
+        android:padding="1dp"
+        android:src="@drawable/image"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/feedPostName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ellipsize="marquee"
+        android:fontFamily="@font/poppins_semibold"
+        android:maxLines="1"
+        android:text="Gandalf the Gray"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/feedPostProfilePic"
+        app:layout_constraintStart_toEndOf="@+id/feedPostProfilePic"
+        app:layout_constraintTop_toTopOf="@+id/feedPostProfilePic" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/feedPostVP"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginTop="16dp"
+
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feedPostProfilePic" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/feedPostVP">
+
+
+        <ImageView
+            android:id="@+id/feedLikeButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/heart"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/feedPostLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/feedLikeButton"
+            app:layout_constraintStart_toEndOf="@+id/feedLikeButton"
+            app:layout_constraintTop_toTopOf="@+id/feedLikeButton" />
+
+        <ImageView
+            android:id="@+id/feedPostCommentButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/comments"
+            app:layout_constraintBottom_toBottomOf="@+id/feedLikeButton"
+            app:layout_constraintStart_toEndOf="@+id/feedPostLikes"
+            app:layout_constraintTop_toTopOf="@+id/feedPostLikes" />
+
+
+        <TextView
+            android:id="@+id/feedPostComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/feedLikeButton"
+            app:layout_constraintStart_toEndOf="@+id/feedPostCommentButton"
+            app:layout_constraintTop_toTopOf="@+id/feedLikeButton" />
+
+
+        <com.colormoon.readmoretextview.ReadMoreTextView
+            android:id="@+id/feedPostCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_regular"
+            android:maxHeight="170dp"
+            android:text="kjadfksjknvjk vjfvfnvvn nvkdkeqwfbjkjbfeqwjbfjebfjbejfbjerwj ejcjejqfjkeqnkjnkwjdqenjnqejnjenjdqnejndjnfjnjnfjenjfnjnfjnejfnjenfjnefjnejfnjwnqbfjejfhqhjefbhjbfjkweqfbjerfbjkjadfksjknvjk vjfvfnvvn nvkdkeqwfbjkjbfeqwjbfjebfjbejfbjerwj ejcjejqfjkeqnkjnkwjdqenjnqejnjenjdqnejndjnfjnjnfjenjfnjnfjnejfnjenfjnefjnejfnjwnqbfjejfhqhjefbhjbfjkweqfbjerfbjbjfbjebfjbqbjfbjebfjbqejrbjbfjerfbjwbqjvbfjbjejbjfebfjkebjkbjkbjfbjerfbjebfjbeqjcjbjbedjbdjebwjedbjwedbjwbedkjbejdkbwkjedbjebdjwbejdbejdbjdjwbedjbejdbjwbjwbejbwejbdjebjbedjbjebjejdbkbfkjwebfjbkerbfjbqjkrfbjkjbjwjbejxbjjjbcjbjcbjcj cjejbcjrbjcbejbcjrbcjrbecjbrjcbrjcbfjnwfejnjenfjerfjnrejfnjrefnjjrfnjnjfnrjfnjerfnrejfnrjefnjenrfjnerf"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/feedLikeButton"
+            app:layout_constraintTop_toBottomOf="@+id/feedLikeButton" />
+
+
+        <TextView
+            android:id="@+id/feedPostTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_regular"
+
+            android:text="5 hours ago"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+
+            app:layout_constraintStart_toStartOf="@+id/feedPostCaption"
+            app:layout_constraintTop_toBottomOf="@+id/feedPostCaption" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

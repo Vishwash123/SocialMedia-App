@@ -1,9 +1,11 @@
 package com.example.chatapp
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -28,6 +30,7 @@ import com.example.chatapp.Utilities.ZegoUtil
 import com.example.chatapp.ViewModels.CallsViewModel
 import com.example.chatapp.databinding.ActivityMain2Binding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.permissionx.guolindev.PermissionX
 import com.zegocloud.uikit.plugin.invitation.ZegoInvitationType
 import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallConfig
 import com.zegocloud.uikit.prebuilt.call.ZegoUIKitPrebuiltCallService
@@ -165,6 +168,9 @@ class MainActivity2 : AppCompatActivity() {
 
 
 
+        checkAndRequestPermissions()
+
+
         binding.bottomNav.setOnItemSelectedListener { item->
             when(item.itemId){
                 R.id.chats->{
@@ -234,6 +240,37 @@ class MainActivity2 : AppCompatActivity() {
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkAndRequestPermissions() {
+        // List the permissions you need
+        PermissionX.init(this)
+            .permissions(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_MEDIA_IMAGES,
+                android.Manifest.permission.READ_MEDIA_VIDEO,
+                android.Manifest.permission.READ_MEDIA_AUDIO
+            )
+            .onExplainRequestReason { scope, deniedList ->
+                scope.showRequestReasonDialog(deniedList, "Storage Permissions Required", "These permissions are necessary to access and manage media files on your device.")
+            }
+            .onForwardToSettings { scope, deniedList ->
+                scope.showForwardToSettingsDialog(deniedList,"You need to grant these permissions manually in your device settings.","OK","Cancel")
+                        //showForwardToSettingsDialog(deniedList, "You need to grant these permissions manually in your device settings.")
+            }
+            .request { allGranted, grantedList, deniedList ->
+                if (allGranted) {
+                    // All permissions are granted, proceed with your logic
+                    // ...
+                } else {
+                    // Handle denied permissions
+                    // ...
+                }
+            }
+
+    }
 
 
 

@@ -3,10 +3,12 @@ package com.example.chatapp.Models
 data class Post(
     val postId:String="",
     val posterId:String="",
+    val posterName:String="",
     val posterProfilePic:String="",
     val timestamp:Long=0L,
-    val likes:Int = 0,
+    var likes:Int = 0,
     val comments:Int = 0,
+    val likers:MutableList<String> = mutableListOf(),
     val commentIds:List<String> = mutableListOf(),
     var mediaUrls:List<String> = mutableListOf(),
     val slides:Int=0,

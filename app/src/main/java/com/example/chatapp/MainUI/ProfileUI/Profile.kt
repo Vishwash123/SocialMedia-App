@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +16,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.chatapp.MainActivity
+import com.example.chatapp.Models.Post
 import com.example.chatapp.R
 import com.example.chatapp.Utilities.FirebaseService
+import com.example.chatapp.ViewModels.PostViewModel
 import com.example.chatapp.ViewModels.UserViewModel
 import com.example.chatapp.databinding.FragmentProfileBinding
 import com.google.android.material.textfield.TextInputEditText
@@ -30,12 +34,13 @@ class Profile : Fragment() {
 
     private lateinit var binding:FragmentProfileBinding
     private val userViewModel:UserViewModel by activityViewModels()
+    private val postViewModel:PostViewModel by activityViewModels()
     private lateinit var currentUser:FirebaseUser
     private lateinit var profilePostsRvAdapter: ProfilePostsRvAdapter
     private var profilePic:String=""
     private val STORAGE_PERMISSION_REQUEST_CODE = 1002
     private lateinit var photoLauncher:ActivityResultLauncher<String>
-
+    private val list = mutableListOf<Post>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +53,7 @@ class Profile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         currentUser = FirebaseService.firebaseAuth.currentUser!!
+
         userViewModel.fetchProfilUIState(currentUser.uid)
         userViewModel.profileUiState.observe(viewLifecycleOwner){state->
             binding.profileName.text = state.name
@@ -60,6 +66,7 @@ class Profile : Fragment() {
                 binding.catFace.visibility = View.VISIBLE
             }
             else{
+               // Log.d("profile posts xxo","showinf rv")
                 binding.profilePostsRv.visibility=View.VISIBLE
                 binding.profileNoPostsTv.visibility = View.GONE
                 binding.catFace.visibility = View.GONE
@@ -67,6 +74,8 @@ class Profile : Fragment() {
             profilePic = state.profilePic
             Glide.with(requireContext()).load(state.profilePic).placeholder(R.drawable.profile).into(binding.profilePhoto)
         }
+
+
 
         photoLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){uri->
             uri?.let {
@@ -82,10 +91,10 @@ class Profile : Fragment() {
             photoLauncher.launch("image/*")
         }
 
-        val list = mutableListOf<Int>()
-        for(i in 1..15){
-            list.add(R.drawable.demo_image)
-        }
+//        val list = mutableListOf<Int>()
+//        for(i in 1..15){
+//            list.add(R.drawable.demo_image)
+//        }
 
         binding.profileLogoutButton.setOnClickListener{
             logout()
@@ -98,8 +107,17 @@ class Profile : Fragment() {
 
 
         binding.profilePostsRv.layoutManager = GridLayoutManager(requireContext(),3)
-        profilePostsRvAdapter = ProfilePostsRvAdapter(requireContext(),list)
+        profilePostsRvAdapter = ProfilePostsRvAdapter(requireContext(),list,parentFragmentManager)
         binding.profilePostsRv.adapter = profilePostsRvAdapter
+
+
+        postViewModel.fetchUserPosts(FirebaseService.firebaseAuth.currentUser!!.uid)
+        postViewModel.userPostList.observe(viewLifecycleOwner){postList->
+            list.clear()
+            list.addAll(postList!!)
+            list.sortByDescending{ it.timestamp }
+            profilePostsRvAdapter.notifyDataSetChanged()
+        }
 
     }
 

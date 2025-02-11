@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="12dp"
+    android:paddingEnd="12dp"
+    android:paddingStart="12dp"
+    >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/replyItemProfilePic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="1dp"
+        android:src="@drawable/image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/replyItemUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Byakuya Kuchiki"
+        android:textSize="13sp"
+
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/replyItemProfilePic"
+        app:layout_constraintTop_toTopOf="@+id/replyItemProfilePic" />
+
+    <TextView
+        android:id="@+id/replyItemTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_regular"
+        android:text="2d ago"
+        android:textColor="@color/textSecondary"
+        android:textSize="8sp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/replyItemUserName"
+        app:layout_constraintStart_toEndOf="@+id/replyItemUserName"
+        app:layout_constraintTop_toTopOf="@+id/replyItemUserName" />
+
+    <ImageView
+        android:id="@+id/replyLikeButton"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/heart"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/replyLikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="1658"
+        android:textColor="@color/textSecondary"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@+id/replyLikeButton"
+        app:layout_constraintStart_toStartOf="@+id/replyLikeButton"
+        app:layout_constraintTop_toBottomOf="@+id/replyLikeButton" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/replyLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/replyItemUserName"
+        app:layout_constraintTop_toBottomOf="@+id/replyItemUserName"
+        app:layout_constraintEnd_toStartOf="@+id/replyLikeButton"
+
+        >
+
+
+        <ImageView
+            android:id="@+id/replyImage"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/demo_image"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.colormoon.readmoretextview.ReadMoreTextView
+            android:id="@+id/replyCaption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_regular"
+            android:maxHeight="170dp"
+            android:text="kjadfksjknvjk vjfvfnvvn nvkdkeqwfbjkjbfeqwjbfjebfjbejfbjerwj ejcjejqfjkeqnkjnkwjdqenjnqejnjenjdqnejndjnfjnjnfjenjfnjnfjnejfnjenfjnefjnejfnjwnqbfjejfhqhjefbhjbfjkweqfbjerfbjkjadfksjknvjk vjfvfnvvn nvkdkeqwfbjkjbfeqwjbfjebfjbejfbjerwj ejcjejqfjkeqnkjnkwjdqenjnqejnjenjdqnejndjnfjnjnfjenjfnjnfjnejfnjenfjnefjnejfnjwnqbfjejfhqhjefbhjbfjkweqfbjerfbjbjfbjebfjbqbjfbjebfjbqejrbjbfjerfbjwbqjvbfjbjejbjfebfjkebjkbjkbjfbjerfbjebfjbeqjcjbjbedjbdjebwjedbjwedbjwbedkjbejdkbwkjedbjebdjwbejdbejdbjdjwbedjbejdbjwbjwbejbwejbdjebjbedjbjebjejdbkbfkjwebfjbkerbfjbqjkrfbjkjbjwjbejxbjjjbcjbjcbjcj cjejbcjrbjcbejbcjrbcjrbecjbrjcbrjcbfjnwfejnjenfjerfjnrejfnjrefnjjrfnjnjfnrjfnjerfnrejfnrjefnjenrfjnerf"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/replyImage"
+            app:trimCollapsedText="Read More"
+            app:trimExpandedText="Read less"
+            app:trimLines="4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/replyReplyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Reply"
+        android:textColor="@color/textSecondary"
+        android:layout_marginTop="4dp"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="@+id/replyLayout"
+        app:layout_constraintTop_toBottomOf="@+id/replyLayout" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

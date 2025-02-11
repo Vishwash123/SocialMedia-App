@@ -207,6 +207,13 @@ object AttachmentUtils {
         }
     }
 
+    fun getFileTypeFromUrl(url: String): String {
+        return when {
+            url.endsWith(".jpg", true) || url.endsWith(".jpeg", true) || url.endsWith(".png", true) || url.endsWith(".gif", true) -> "photo"
+            url.endsWith(".mp4", true) || url.endsWith(".mkv", true) || url.endsWith(".avi", true) -> "video"
+            else -> "unknown"
+        }
+    }
 
 
 
